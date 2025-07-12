@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { createPost } from '../features/post/postSlice'
+import { createPost, fetchMyPosts } from '../features/post/postSlice'
 // import useRouter from "react"
 // import axios from 'axios';
 
@@ -20,19 +20,20 @@ const CreatePostPage = () => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(createPost(formData)).unwrap()
-      setFormData({
-        title: "",
-        content: ""
-      })
-      navigate("/feed")
+      const result = await dispatch(createPost(formData)).unwrap();
+      if (result) {
+        await dispatch(fetchMyPosts()); // ⬅️ Refresh posts after creation
+        setFormData({ title: "", content: "" });
+        navigate("/feed");
+      }
     } catch (error) {
-      console.log(error)
+      console.log("Post creation failed:", error);
     }
-  }
+  };
+
   // useEffect(() => {
   //   if (!token) {
   //     navigate("/auth/login")

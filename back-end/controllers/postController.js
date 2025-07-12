@@ -55,10 +55,14 @@ exports.getOnePost = async (req, res) => {
 //  Get posts of the logged-in user
 exports.getOwnPosts = async (req, res) => {
   try {
+    console.log("[GET OWN POSTS] req.user:", req.user);
     const posts = await Post.find({ author: req.user.id }).sort({
       createdAt: -1,
     });
-    return res.status(200).json(posts);
+    console.log(
+      `[GET OWN POSTS] Found ${posts.length} posts for user ${req.user.id}`
+    );
+    return res.status(200).json({ posts });
   } catch (error) {
     return res.status(500).json({ message: "Failed to fetch user's posts" });
   }

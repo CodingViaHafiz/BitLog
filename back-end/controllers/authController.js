@@ -39,11 +39,13 @@ exports.login = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
+      console.log(`[LOGIN] Failed: User not found for email: ${email}`);
       return res.status(404).json({ message: "User not found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.log(`[LOGIN] Failed: Invalid credentials for email: ${email}`);
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
@@ -59,6 +61,9 @@ exports.login = async (req, res) => {
       sameSite: "lax",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
+    console.log(
+      `[LOGIN] Success: User ${user.email} logged in, token cookie set.`
+    );
 
     res.status(200).json({
       message: "Login successful!",

@@ -93,9 +93,10 @@ export const fetchMyPosts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await axios.get("/posts/me", { withCredentials: true });
-      console.log(res.data);
-      return res.data;
+      console.log("[THUNK] /posts/me response:", res.data);
+      return res.data.posts;
     } catch (error) {
+      console.log("[THUNK] /posts/me error:", error, error?.response?.data);
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch my posts"
       );
@@ -159,7 +160,7 @@ const postSlice = createSlice({
       })
       .addCase(fetchMyPosts.fulfilled, (state, action) => {
         state.loading = false;
-        state.posts = action.payload;
+        state.posts = action.payload; // ✅ Accepts array directly
       })
       .addCase(fetchMyPosts.rejected, (state, action) => {
         state.loading = false;

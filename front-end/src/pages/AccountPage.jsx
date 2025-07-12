@@ -32,9 +32,16 @@ const AccountPage = () => {
 
 
   useEffect(() => {
-    console.log("User in useEffect:", user)
-    if (user?.id) dispatch(fetchMyPosts())
-  }, [dispatch, user?.id]);
+    console.log("[AccountPage] useEffect - user:", user);
+    if (user?._id) {
+      dispatch(fetchMyPosts());
+    }
+  }, [dispatch, user?._id]);
+
+
+  useEffect(() => {
+    console.log("[FRONTEND] posts state after fetch:", posts);
+  }, [posts]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

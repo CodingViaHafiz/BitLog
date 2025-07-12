@@ -35,4 +35,7 @@ router.delete("/:id", protect, deletePost);
 // get all posts for Admin
 router.get("/admin/all", protect, adminOnly, getAdminAllposts);
 
+// post detail
+// router.get("/");
+
 module.exports = router;

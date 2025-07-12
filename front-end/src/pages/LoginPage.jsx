@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../features/auth/authSlice';
+import { fetchUser, loginUser } from '../features/auth/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import { fetchMyPosts } from '../features/post/postSlice';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -14,11 +15,14 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await dispatch(loginUser({ email, password }));
-    console.log("Heartbeats", result)
+
     if (result.type === 'auth/login/fulfilled') {
-      navigate('/me');
+      await dispatch(fetchUser());           // ✅ 1. Get logged-in user
+      await dispatch(fetchMyPosts());        // ✅ 2. Get their posts
+      navigate('/me');                       // ✅ 3. Go to account page
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400">

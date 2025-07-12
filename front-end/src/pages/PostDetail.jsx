@@ -1,10 +1,17 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 
 const PostDetail = () => {
   const { id } = useParams();
   const post = useSelector((state) => state.posts.posts.find((p) => p._id === id));
+  const user = useSelector((state) => state.auth.user)
+  if (!user) {
+    return <Navigate to={"/"} />
+  }
+  if (user.role !== "admin") {
+    return <Navigate to={"/me"} />
+  }
   if (!post) {
     return <p className='text-center mt-10 text-red-500'>post not found.</p>
   }

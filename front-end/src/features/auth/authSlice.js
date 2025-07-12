@@ -5,7 +5,7 @@ const initialState = {
   user: null,
   loading: false,
   error: null,
-  intialized: false,
+  initialized: false,
 };
 
 //login thunk
@@ -16,6 +16,7 @@ export const loginUser = createAsyncThunk(
       const res = await axios.post("http://localhost:1000/", userData, {
         withCredentials: true, // allows the browser to sends cookies (imp if using sessions or jwt with cookies)
       });
+      console.log(res.data.user);
       return res.data.user; //	Sends user data to reducer if login succeeds
     } catch (error) {
       return rejectWithValue(error.response.data.message);
@@ -64,40 +65,40 @@ export const logoutUser = createAsyncThunk(
 );
 
 // fetch user
-// export const fetchUser = createAsyncThunk(
-//   "fetch/user",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const res = await axios.get("http://localhost:1000/users/my", {
-//         withCredentials: true,
-//       });
-//       console.log("user", res.data);
-//       return res.data;
-//     } catch (error) {
-//       if (error.response?.status === 401) return null;
-//       return rejectWithValue(error.response.data.message);
-//     }
-//   }
-// );
-
-// ✅ fetchUser with thunkAPI for error handling
 export const fetchUser = createAsyncThunk(
-  "user/fetchUser",
-  async (_, thunkAPI) => {
+  "fetch/user",
+  async (_, { rejectWithValue }) => {
     try {
       const res = await axios.get("http://localhost:1000/users/my", {
         withCredentials: true,
       });
-      console.log("✅ user fetched", res.data);
+      console.log("user", res.data);
       return res.data;
     } catch (error) {
-      if (error.response?.status === 401) return null; // not logged in
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "User fetch failed"
-      );
+      if (error.response?.status === 401) return null;
+      return rejectWithValue(error.response.data.message);
     }
   }
 );
+
+// ✅ fetchUser with thunkAPI for error handling
+// export const fetchUser = createAsyncThunk(
+//   "user/fetchUser",
+//   async (_, thunkAPI) => {
+//     try {
+//       const res = await axios.get("http://localhost:1000/users/my", {
+//         withCredentials: true,
+//       });
+//       console.log("✅ user fetched", res.data);
+//       return res.data;
+//     } catch (error) {
+//       if (error.response?.status === 401) return null; // not logged in
+//       return thunkAPI.rejectWithValue(
+//         error.response?.data?.message || "User fetch failed"
+//       );
+//     }
+//   }
+// );
 
 // auth Slice
 const authSlice = createSlice({
@@ -158,12 +159,12 @@ const authSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-        state.intialized = true;
+        state.initialized = true;
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        state.intialized = true;
+        state.initialized = true;
       });
   },
 });

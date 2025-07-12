@@ -13,21 +13,20 @@ import PostDetail from './pages/PostDetail.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { fetchUser } from './features/auth/authSlice.js'
-import Cookies from "js-cookie"
+// import Cookies from "js-cookie"
 
 function App() {
-  // const { initialized } = useSelector((state) => state.auth);
-  // if (!initialized) {
-  //   return <p className='text-center mt-20'>Initializing ...</p>
-  // }
+  const { initialized } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth)
 
   const dispatch = useDispatch();
   useEffect(() => {
-    const token = Cookies.get("token");
-    if (token) {
-      dispatch(fetchUser())
-    }
-  }, [dispatch])
+    dispatch(fetchUser());
+  }, [dispatch]);
+
+  if (!initialized) {
+    return <p className="text-center mt-20">Initializing...</p>;
+  }
 
   return (
     <Router>

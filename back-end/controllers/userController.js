@@ -27,6 +27,6 @@ exports.deleteUser = async (req, res) => {
 
 //
 exports.fetchUser = async (req, res) => {
-  console.log("✅ /users/my called by:", req.user);
+  console.log("[FETCH USER] /users/my called. req.user:", req.user);
   return res.status(200).json(req.user);
 };
