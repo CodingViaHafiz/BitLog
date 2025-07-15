@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-
+import { motion } from "framer-motion";
 const SignupPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,9 +22,9 @@ const SignupPage = () => {
     e.preventDefault();
 
     dispatch(signupUser(formData)).then((res) => {
-      console.log("Signup response:", res);
+      // console.log("Signup response:", res);
       if (res.meta.requestStatus === "fulfilled") {
-        navigate("/auth/login");
+        navigate("/");
       }
     });
   };
@@ -32,9 +32,14 @@ const SignupPage = () => {
 
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-700 to-pink-500 px-4">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-peach-400 via-peach-100 to-peach-400
+ ">
+      <motion.div
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="bg-white/60 p-8 rounded-2xl shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center text-headingText mb-6">
           Sign Up
         </h2>
 
@@ -48,7 +53,7 @@ const SignupPage = () => {
             placeholder="Full Name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-4 py-2 border placeholder-headingText rounded-md focus:outline-none focus:ring-1 focus:ring-headingText"
             required
           />
 
@@ -58,7 +63,7 @@ const SignupPage = () => {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-4 py-2 border rounded-md placeholder-headingText focus:outline-none focus:ring-1 focus:ring-headingText"
             required
           />
 
@@ -68,19 +73,19 @@ const SignupPage = () => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full px-4 py-2 border rounded-md placeholder-headingText focus:outline-none focus:ring-2 focus:ring-headingText"
             required
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition"
+            className="w-full bg-headingText text-white hover:text-headingText border hover:border-headingText py-2 font-semibold rounded-md hover:bg-white transition"
           >
             {loading ? "Creating Account..." : "Sign Up"}
           </button>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

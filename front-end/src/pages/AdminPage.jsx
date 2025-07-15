@@ -43,12 +43,12 @@ const AdminPage = () => {
   }
   return (
     <div>
-      <div className="w-full max-w-3xl mx-auto my-12 p-6 border border-emerald-300 rounded-2xl shadow-lg bg-transparent">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-emerald-600 underline decoration-dashed  text-center">
+      <div className="w-full max-w-3xl mx-auto my-12 p-6 border border-headingText  rounded-2xl shadow-lg bg-transparent">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-headingText underline decoration-dashed  text-center">
           Admin Dashboard
         </h1>
-        <h2 className='text-3xl text-blue-600'> welcome{user.name}</h2>
-        <p className="mt-4 text-gray-500 text-center text-sm sm:text-base">
+        <h2 className='text-3xl text-fontText'> welcome{user.name}</h2>
+        <p className="mt-4 text-fontText text-center text-sm sm:text-base">
           Welcome to your control panel — manage users, content, and settings with ease.
         </p>
       </div>

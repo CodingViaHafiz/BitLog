@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  createPost, deletePost, fetchMyPosts, updatePost
+  deletePost, fetchMyPosts, updatePost
 } from "../features/post/postSlice"
-import PostForm from '../components/PostForm'
 import { Link, useNavigate } from 'react-router-dom'
 import { logoutUser } from "../features/auth/authSlice"
-
 
 const AccountPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, initialized } = useSelector((state) => state.auth);
   const { loading, error, posts } = useSelector((state) => state.posts);
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ title: "", content: "" });
+
   // editing post 
   const [editingPostId, setEditingPostId] = useState(null);
   const [editFormData, setEditFormData] = useState({
     title: "",
     content: ""
-  })
+  });
 
   if (!initialized) {
     return <p className="text-center mt-20">Loading user info...</p>;
@@ -30,40 +27,23 @@ const AccountPage = () => {
     return <p className="text-center text-red-500">Unauthorized. Please log in.</p>;
   }
 
-
   useEffect(() => {
-    console.log("[AccountPage] useEffect - user:", user);
     if (user?._id) {
       dispatch(fetchMyPosts());
     }
   }, [dispatch, user?._id]);
 
-
   useEffect(() => {
     console.log("[FRONTEND] posts state after fetch:", posts);
   }, [posts]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(createPost(formData)).then((res) => {
-      if (res.meta.requestStatus === "fulfilled") {
-        setFormData({ title: "", content: "" });
-        setShowForm(false);
-      }
-    });
-  };
-
   const handleEdit = (post) => {
-    setEditingPostId(post._id) // mark which post is being edited
+    setEditingPostId(post._id);
     setEditFormData({
       title: post.title,
       content: post.content
-    })
-  }
+    });
+  };
 
   const handleEditChange = (e) => {
     setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
@@ -73,104 +53,73 @@ const AccountPage = () => {
     e.preventDefault();
     dispatch(updatePost({ id: editingPostId, updatedData: editFormData })).then(res => {
       if (res.meta.requestStatus === 'fulfilled') {
-        setEditingPostId(null) // close the form
+        setEditingPostId(null);
       }
-    })
-  }
+    });
+  };
 
-  // delete post
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete the post?")) {
-      dispatch(deletePost({ id }))
+      dispatch(deletePost({ id }));
     }
   };
 
-  const handleLogout = () => {
-    dispatch(logoutUser()).then((res) => {
-      if (res.meta.requestStatus === "fulfilled") {
-        navigate("/")
-      }
-    })
-  }
 
-
-  // const userPosts = posts.filter((post) => post.author._id === user.id)
   const userPosts = posts;
 
-
-
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-purple-700">My Account</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-        >
-          Logout
-        </button>
-        <Link
-          to={"/feed"}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        >
-          Feed
-        </Link>
+    <div className="px-6 py-8 w-full">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-10">
+        <h1 className="text-3xl font-bold text-headingText">Welcome {user.name}</h1>
+        <div className="mb-6">
+          <Link
+            to="/posts/create"
+            className="inline-block bg-headingText hover:bg-gray-900 text-white font-medium px-5 py-2 rounded-md transition hover:scale-105"
+          >
+            + Create New Post
+          </Link>
+        </div>
       </div>
 
-      {/* Create Post Toggle Button */}
-      <button
-        onClick={() => setShowForm(!showForm)}
-        className="mb-6 bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700"
-      >
-        {showForm ? "Cancel" : "Create New Post"}
-      </button>
+      {/* Create Post Button */}
 
-      {/* Create Post Form */}
-      {showForm && (
-        <div className="mb-6">
-          <PostForm
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            loading={loading}
-            buttonLabel="Create Post"
-          />
-        </div>
-      )}
+      {/* My Posts Heading */}
+      <h2 className="text-2xl font-semibold text-gray-700 mb-4">My Posts</h2>
 
-      {/* List User Posts */}
-      <h2 className="text-xl font-semibold mb-4">My Posts</h2>
-
+      {/* User Posts */}
       {userPosts.length === 0 ? (
-        <p>You haven't created any posts yet.</p>
+        <p className="text-gray-500 italic">You haven't created any posts yet.</p>
       ) : (
-        Array.isArray(userPosts) && userPosts.map((post) =>
+        userPosts.map((post) =>
           editingPostId === post._id ? (
             <form
               key={post._id}
               onSubmit={handleEditSubmit}
-              className="space-y-2 bg-white p-4 rounded-md shadow mb-4"
+              className="bg-white border border-gray-200 p-4 rounded-md shadow-sm mb-4"
             >
               <input
                 name="title"
                 value={editFormData.title}
                 onChange={handleEditChange}
-                className="w-full border px-2 py-1"
+                className="w-full border border-gray-300 px-3 py-2 rounded mb-2"
+                placeholder="Post Title"
               />
               <textarea
                 name="content"
                 value={editFormData.content}
                 onChange={handleEditChange}
-                className="w-full border px-2 py-1"
+                className="w-full border border-gray-300 px-3 py-2 rounded mb-2"
+                placeholder="Post Content"
               />
-              <div className="flex gap-2">
-                <button type="submit" className="bg-green-600 text-white px-4 py-1 rounded">
-                  Save Changes
+              <div className="flex gap-3">
+                <button type="submit" className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700">
+                  Save
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditingPostId(null)}
-                  className="text-red-600"
+                  className="text-red-600 font-medium hover:underline"
                 >
                   Cancel
                 </button>
@@ -179,31 +128,36 @@ const AccountPage = () => {
           ) : (
             <div
               key={post._id}
-              className="bg-white p-4 rounded-md shadow mb-4"
+              className="bg-white border border-gray-200 p-5 rounded-md shadow-sm mb-4"
             >
-              <h3 className="text-xl font-semibold">{post.title}</h3>
-              <p>{post.content}</p>
-              <div className="flex space-x-4 mt-2">
+              <h3 className="text-lg font-semibold text-gray-800">{post.title}</h3>
+              <p className="text-gray-700 mt-1"
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              >
+
+              </p>
+              <div className="flex space-x-4 mt-3">
                 <button
                   onClick={() => handleEdit(post)}
-                  className="text-blue-600 hover:underline"
+                  className="text-blue-600 font-medium hover:underline"
                 >
-                  ✏️ Edit
+                  Edit
                 </button>
                 <button
                   onClick={() => handleDelete(post._id)}
-                  className="text-red-600 hover:underline"
+                  className="text-red-600 font-medium hover:underline"
                 >
-                  🗑️ Delete
+                  Delete
                 </button>
               </div>
             </div>
           )
         )
       )}
+    </div >
 
-    </div>
+
   );
 };
 
-export default AccountPage
+export default AccountPage;

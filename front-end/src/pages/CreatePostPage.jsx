@@ -1,82 +1,68 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux"
-import { createPost, fetchMyPosts } from '../features/post/postSlice'
-// import useRouter from "react"
-// import axios from 'axios';
+import React, { useState } from 'react';
+import { Editor } from '@tinymce/tinymce-react';
+import { useDispatch } from 'react-redux';
+import { createPost, fetchAllPosts } from '../features/post/postSlice';
+import { useNavigate } from 'react-router-dom';
 
 const CreatePostPage = () => {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.posts);
-  const [formData, setFormData] = useState({
-    title: "",
-    content: ""
-  })
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const result = await dispatch(createPost(formData)).unwrap();
-      if (result) {
-        await dispatch(fetchMyPosts()); // ⬅️ Refresh posts after creation
-        setFormData({ title: "", content: "" });
-        navigate("/feed");
-      }
+      await dispatch(createPost({ title, content })).unwrap();
+      await dispatch(fetchAllPosts());
+      navigate('/feed');
     } catch (error) {
-      console.log("Post creation failed:", error);
+      console.error('Post creation failed:', error);
     }
   };
 
-  // useEffect(() => {
-  //   if (!token) {
-  //     navigate("/auth/login")
-  //   }
-  // })
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-300 to-purple-300 px-4">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-        <h2 className="text-2xl font-bold mb-6 text-purple-700 text-center">
-          Create New Post
-        </h2>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold text-headingText mb-6">Create a New Post</h1>
 
-        {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <input
+          type="text"
+          placeholder="Enter Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full border px-4 py-2 rounded-xl"
+        />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            placeholder="Post Title"
-            required
-            className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
-          <textarea
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            placeholder="Write your content here..."
-            rows={6}
-            required
-            className="w-full border px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-          ></textarea>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition"
-          >
-            {loading ? "Posting..." : "Create Post"}
-          </button>
-        </form>
-      </div>
+        {/* TinyMCE Editor */}
+        <Editor
+          apiKey="z43igi6uxlih9byfjt5szosrk89qu9prnylbztf9umdn4ckc" //   API key
+          value={content}
+          onEditorChange={(newValue) => setContent(newValue)}
+          init={{
+            height: 400,
+            menubar: false,
+            plugins: [
+              'advlist autolink lists link image charmap preview anchor',
+              'searchreplace visualblocks code fullscreen',
+              'insertdatetime media table code help wordcount',
+            ],
+            toolbar:
+              'undo redo | formatselect | bold italic underline | \
+              alignleft aligncenter alignright alignjustify | \
+              bullist numlist outdent indent | removeformat | help',
+          }}
+        />
+
+        <button
+          type="submit"
+          className="bg-headingText text-white px-6 py-2 rounded-xl hover:bg-headingText/90 transition"
+        >
+          Publish Post
+        </button>
+      </form>
     </div>
-  )
-}
+  );
+};
 
-export default CreatePostPage
+export default CreatePostPage;

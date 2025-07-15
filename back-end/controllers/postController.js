@@ -1,12 +1,32 @@
 const Post = require("../models/postModel");
 const User = require("../models/userModel");
 const slugify = require("slugify");
+const sanitizeHtml = require("sanitize-html");
 
 // create post
+
 exports.createPost = async (req, res) => {
   console.log("POST BODY:", req.body);
   console.log("USER:", req.user);
   try {
+    const capitalizeFirst = (text) =>
+      text.trim().charAt(0).toUpperCase() + text.trim().slice(1);
+
+    const cleanTitle = capitalizeFirst(
+      sanitizeHtml(req.body.title, {
+        allowedTags: [], // strip all HTML tags
+        allowedAttributes: {}, // no attributes allowed
+      })
+    );
+    const cleanContent = sanitizeHtml(req.body.content, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+      allowedAttributes: {
+        a: ["href", "name", "target"],
+        img: ["src", "alt"],
+        "*": ["style"],
+      },
+    });
+
     const { title, content } = req.body;
     if (!title || !content) {
       res.status(400).json({ message: "All fields are required" });
@@ -14,8 +34,8 @@ exports.createPost = async (req, res) => {
     const slugBase = slugify(title, { lower: true });
     const uniqueSlug = `${slugBase}-${Date.now()}`;
     const post = await Post.create({
-      title,
-      content,
+      title: cleanTitle,
+      content: cleanContent,
       slug: uniqueSlug,
       author: req.user.id,
       publishedAt: new Date(),

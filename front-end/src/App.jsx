@@ -13,6 +13,8 @@ import PostDetail from './pages/PostDetail.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { fetchUser } from './features/auth/authSlice.js'
+import Layout from './components/Layout.jsx'
+import ProtectedRoute from './routes/ProtectedRoute.jsx'
 // import Cookies from "js-cookie"
 
 function App() {
@@ -31,18 +33,21 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        // protected routes
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Layout />}>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/postcard" element={<PostForm />} />
+            <Route path="/posts/create" element={<CreatePostPage />} />
+            <Route path="/feed" element={<FeedPage />} />
+            <Route path="/me" element={<AccountPage />} />
+            <Route path="/admin/all" element={<AdminPage />} />
+            <Route path="/posts/:id" element={<PostDetail />} />
+          </Route>
+        </Route>
+        // public routes
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/postcard" element={<PostForm />} />
-        <Route path="/posts/create" element={<CreatePostPage />} />
-        <Route path="/feed" element={<FeedPage />} />
-        <Route path="/me" element={<AccountPage />} />
-        <Route path="/admin/all" element={<AdminPage />} />
-        <Route path="/posts/:id" element={<PostDetail />} />
-
-
-
         {/* <Route path="*" element={<h1>Route Not Found</h1>} /> */}
 
 
