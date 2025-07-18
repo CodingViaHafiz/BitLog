@@ -1,3 +1,20 @@
 font {
   color: #794a42;
 }
+.welcome-heading {
+  color: #317baf;
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: "Poppins", sans-serif; /* clean modern font */
+  letter-spacing: 1px;
+}
+
+.welcome-subtitle {
+  color: #317baf;
+  font-size: 1.2rem;
+  font-weight: 500;
+  font-family: "Open Sans", sans-serif;
+}
+/* body {
+  background-color: #e4f2fb;
+} */

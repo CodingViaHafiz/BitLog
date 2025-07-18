@@ -71,11 +71,11 @@ const AccountPage = () => {
     <div className="px-6 py-8 w-full">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-10">
-        <h1 className="text-3xl font-bold text-headingText">Welcome {user.name}</h1>
+        <h1 className="text-3xl font-bold text-fontblue">Welcome {user.name}</h1>
         <div className="mb-6">
           <Link
-            to="/posts/create"
-            className="inline-block bg-headingText hover:bg-gray-900 text-white font-medium px-5 py-2 rounded-md transition hover:scale-105"
+            to="/app/posts/create"
+            className="inline-block bg-fontblue hover:bg-hoverColor text-white font-medium px-5 py-2 rounded-md transition hover:scale-105"
           >
             + Create New Post
           </Link>

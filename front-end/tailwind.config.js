@@ -4,20 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        headingText: "#9f6257;",
+        headingText: "#9f6257",
         fontText: "#794a42",
-        peach: {
-          50: "#fff7f0",
-          100: "#fff1e5",
-          200: "#ffe9d7",
-          300: "#ffdfc8",
-          400: "#ffd3b2",
-          500: "#ffead8",
-          600: "#f5c8a7",
-          700: "#e0a784",
-          800: "#cc8a67",
-          900: "#b26e4e",
-        },
+        fontColor: "#317BAF",
+        fontblue: "#6366F1",
+        hoverColor: "#2563EB", // <- just the color code
       },
     },
   },

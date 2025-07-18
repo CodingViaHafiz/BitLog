@@ -7,9 +7,42 @@ import axios from "axios";
 
 const initialState = {
   posts: [],
+  authorStats: [],
+  postStats: null,
   loading: false,
   error: null,
 };
+
+// post stats
+export const getPostStats = createAsyncThunk(
+  "post/stats",
+  async (_, rejectWithValue) => {
+    try {
+      const res = await axios.get("/posts/stats", { withCredentials: true });
+      console.log(res.data);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+// count author posts
+export const totalPostsAuthor = createAsyncThunk(
+  "posts/author-count",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axios.get("http://localhost:1000/posts/author-count", {
+        withCredentials: true,
+      });
+      console.log(res.data);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 // fetch all posts
 export const fetchAllPosts = createAsyncThunk(
   "posts/fetch",
@@ -44,7 +77,10 @@ export const createPost = createAsyncThunk(
   "posts/create",
   async (postData, { rejectWithValue }) => {
     try {
-      const res = await axios.post("/posts/create", postData);
+      const res = await axios.post(
+        "http://localhost:1000/posts/create",
+        postData
+      );
       return res.data.post;
     } catch (error) {
       return rejectWithValue(error.response.data.message);
@@ -180,6 +216,32 @@ const postSlice = createSlice({
       .addCase(deletePost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      // count author posts
+      .addCase(totalPostsAuthor.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(totalPostsAuthor.fulfilled, (state, action) => {
+        state.loading = false;
+        state.authorStats = action.payload;
+      })
+      .addCase(totalPostsAuthor.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      // post stats
+      .addCase(getPostStats.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getPostStats.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postStats = action.payload;
+      })
+      .addCase(getPostStats.pending, (state) => {
+        state.error = null;
+        state.loading = true;
       });
   },
 });

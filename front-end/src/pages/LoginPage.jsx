@@ -20,7 +20,7 @@ const LoginPage = () => {
     if (result.type === 'auth/login/fulfilled') {
       await dispatch(fetchUser());           //  Get logged-in user
       await dispatch(fetchMyPosts());        //  Get their posts
-      navigate('/me');                       //  Go to account page
+      navigate('/app/me');                       //  Go to account page
     }
   };
 
@@ -33,7 +33,7 @@ const LoginPage = () => {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className="bg-white/60 p-8 rounded-2xl shadow-lg w-full max-w-md"
       >
-        <h2 className="text-3xl font-bold text-center mb-6 text-headingText">Login</h2>
+        <h2 className="text-3xl font-bold text-center mb-6 text-fontColor">Login</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -41,7 +41,7 @@ const LoginPage = () => {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border border-headingText placeholder-headingText rounded-xl focus:outline-none focus:ring-1 focus:ring-headingText"
+            className="w-full px-4 py-2 border border-fontColor rounded-xl focus:outline-none focus:ring-1 focus:ring-fontColor"
             required
           />
 
@@ -50,7 +50,7 @@ const LoginPage = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border border-headingText placeholder-headingText rounded-xl focus:outline-none focus:ring-1 focus:ring-headingText"
+            className="w-full px-4 py-2 border border-fontColor rounded-xl focus:outline-none focus:ring-1 focus:ring-fontColor"
             required
           />
 
@@ -59,14 +59,14 @@ const LoginPage = () => {
             disabled={loading}
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.02 }}
-            className="w-full bg-headingText hover:bg-white text-white hover:text-headingText font-semibold py-2 rounded-xl transition duration-200 border hover:border-headingText"
+            className="w-full bg-fontColor hover:bg-white text-white hover:text-fontColor font-semibold py-2 rounded-xl transition duration-200 border hover:border-fontColor"
           >
             {loading ? 'Logging in...' : 'Login'}
           </motion.button>
 
           <p className="text-sm text-center">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-fontText underline hover:text-headingText transition">
+            <Link to="/signup" className="text-fontColor underline  transition">
               Sign up
             </Link>
           </p>

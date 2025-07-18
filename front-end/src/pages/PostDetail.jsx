@@ -1,13 +1,23 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
+import { deletePost } from '../features/post/postSlice';
 
 const PostDetail = () => {
   const { id } = useParams();
   const post = useSelector((state) => state.posts.posts.find((p) => p._id === id));
   const user = useSelector((state) => state.auth.user)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete post")) {
+      dispatch(deletePost({ id }))
+    }
+  }
+
   if (!user) {
     return <Navigate to={"/"} />
   }
@@ -18,9 +28,9 @@ const PostDetail = () => {
     return <p className='text-center mt-10 text-red-500'>post not found.</p>
   }
   return (
-    <div className="max-w-4xl mx-auto mt-12 px-6 py-10 bg-white/80 backdrop-blur-md border border-gray-200 shadow-xl rounded-3xl transition-all duration-300">
+    <div className="max-w-4xl mx-auto mt-12 px-6 py-10 bg-white/80 backdrop-blur-md border border-gray-200  rounded-3xl transition-all duration-300">
       {/* Title */}
-      <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-headingText">
+      <h1 className="text-4xl text-center font-extrabold text-transparent bg-clip-text bg-fontColor">
         {post.title}
       </h1>
 
@@ -47,14 +57,24 @@ const PostDetail = () => {
 
       {/* Actions (optional) */}
       <div className="mt-8 flex justify-start">
-        {/* <button className="bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded-xl shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
-        Delete Post
-      </button> */}
-        <button
-          onClick={() => navigate("/feed")}
-          className=' text-headingText border font-semibold px-5 py-2 rounded-xl hover:shadow-lg transition-transform transform hover:scale-105'>
-          Back
-        </button>
+        {user.role === "admin" && (
+          <button
+            onClick={() => handleDelete(post._id)}
+            className='text-red-500'>Delete</button>
+        )}
+        {user.role === "admin" ? (
+          <button
+            onClick={() => navigate("/app/admin/posts")}
+            className=' text-fontColor border font-semibold px-5 py-2 rounded-xl hover:shadow-lg transition-transform transform hover:scale-105'>
+            Back
+          </button>
+        ) :
+          <button
+            onClick={() => navigate("/app/feed")}
+            className=' text-fontColor border font-semibold px-5 py-2 rounded-xl hover:shadow-lg transition-transform transform hover:scale-105'>
+            Back
+          </button>
+        }
       </div>
     </div>
 

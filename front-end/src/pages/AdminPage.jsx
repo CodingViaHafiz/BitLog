@@ -1,85 +1,68 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllPosts } from '../features/post/postSlice';
-import { Link } from 'react-router-dom';
+// src/pages/AdminPage.jsx
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../features/auth/authSlice';
+import { getPostStats } from '../features/post/postSlice';
+import { motion } from 'framer-motion';
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const AdminPage = () => {
   const dispatch = useDispatch();
-  const { posts, error, loading } = useSelector((state) => state.posts);
-  const { user, loading: userLoading } = useSelector((state) => state.auth)
+  const { user, loading: userLoading } = useSelector((state) => state.auth);
+  const { loading: statsLoading, postStats } = useSelector((state) => state.posts);
 
   useEffect(() => {
-    if (!user) {
-      dispatch(fetchUser())
-    }
-  }, [dispatch])
+    if (!user) dispatch(fetchUser());
+    dispatch(getPostStats());
+  }, [dispatch]);
 
-  useEffect(() => {
-    if (user?.role === "admin") {
-      dispatch(fetchAllPosts())
-    }
-  }, [dispatch, user?.role])
+  if (userLoading) return <div className="text-center mt-20">Loading user info...</div>;
+  if (!user) return <div className="text-center mt-20">Unauthorized. Please log in.</div>;
+  if (user.role !== 'admin') return <p className="text-center text-red-600">Access denied: admin only</p>;
 
-  if (userLoading) {
-    return (
-      <div className="text-center mt-20">
-        <p className="text-xl text-gray-500">Loading user info...</p>
-      </div>
-    );
-  }
+  const chartData = {
+    labels: ['This Week', 'This Month', 'This Year'],
+    datasets: [{
+      label: 'Post Count',
+      data: [
+        postStats?.weekly || 0,
+        postStats?.monthly || 0,
+        postStats?.yearly || 0
+      ],
+      backgroundColor: ['#6366F1', '#22C55E', '#FACC15'],
+      borderWidth: 2,
+    }]
+  };
 
-  if (!user) {
-    return (
-      <div className="text-center mt-20">
-        <p className="text-xl text-gray-500">Unauthorized. Please log in.</p>
-      </div>
-    );
-  }
-
-  if (user.role !== "admin") {
-    return <p className='text-center text-red-600'>Access denied: admin only</p>
-  }
   return (
-    <div>
-      <div className="w-full max-w-3xl mx-auto my-12 p-6 border border-headingText  rounded-2xl shadow-lg bg-transparent">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-headingText underline decoration-dashed  text-center">
-          Admin Dashboard
-        </h1>
-        <h2 className='text-3xl text-fontText'> welcome{user.name}</h2>
-        <p className="mt-4 text-fontText text-center text-sm sm:text-base">
-          Welcome to your control panel — manage users, content, and settings with ease.
-        </p>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="max-w-4xl mx-auto"
+    >
+      <h1 className="text-3xl font-bold text-fontblue text-center mb-6">📊 Admin Dashboard</h1>
+
+      <div className="bg-white shadow rounded-2xl p-6 text-center mb-8">
+        <h2 className="text-2xl font-semibold mb-2">Welcome, {user.name}</h2>
+        <p className="text-gray-600">Monitor posts & users from your panel</p>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row lg:flex-wrap gap-6">
-          {Array.isArray(posts) && posts.map((post) => (
-            <Link
-              to={`/posts/${post._id}`}
-              key={post._id}
-              className="bg-white shadow-md rounded-2xl p-6 w-full sm:w-full md:w-[48%] lg:w-[31%] transition-transform hover:scale-[1.02] border border-gray-200"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="bg-indigo-500 text-white text-xl font-bold w-12 h-12 flex items-center justify-center rounded-full shadow">
-                  {post.author?.name?.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-700">{post.author?.name}</p>
-                  <p className="text-xs text-gray-500">{new Date(post.createdAt).toLocaleDateString()}</p>
-                </div>
-              </div>
-
-              <h2 className="text-xl font-semibold text-gray-800 mb-2 line-clamp-2">{post.title}</h2>
-              <p className="text-gray-600 text-sm line-clamp-4">{post.content}</p>
-            </Link>
-          ))}
-        </div>
+      <div className="bg-white shadow rounded-2xl p-6">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          🧭 Post Activity Overview
+        </h3>
+        {statsLoading ? (
+          <p className="text-center">Loading chart...</p>
+        ) : (
+          <Doughnut data={chartData} options={{ responsive: true }} />
+        )}
       </div>
-    </div>
+    </motion.div>
+  );
+};
 
-  )
-}
-
-export default AdminPage
+export default AdminPage;

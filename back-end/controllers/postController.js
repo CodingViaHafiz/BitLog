@@ -2,53 +2,122 @@ const Post = require("../models/postModel");
 const User = require("../models/userModel");
 const slugify = require("slugify");
 const sanitizeHtml = require("sanitize-html");
+// const cloudinary = require("cloudinary");
+// const ImageKit = require("imagekit");
+const ImageKit = require("../utils/imageKit");
+const fs = require("fs");
 
-// create post
-
-exports.createPost = async (req, res) => {
-  console.log("POST BODY:", req.body);
-  console.log("USER:", req.user);
+// post stats
+exports.getPostStats = async (req, res) => {
+  console.log("⚡ getPostStats controller called");
   try {
-    const capitalizeFirst = (text) =>
-      text.trim().charAt(0).toUpperCase() + text.trim().slice(1);
+    const now = new Date();
+    // start of the current week (sunday)
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
 
-    const cleanTitle = capitalizeFirst(
-      sanitizeHtml(req.body.title, {
-        allowedTags: [], // strip all HTML tags
-        allowedAttributes: {}, // no attributes allowed
-      })
-    );
-    const cleanContent = sanitizeHtml(req.body.content, {
-      allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
-      allowedAttributes: {
-        a: ["href", "name", "target"],
-        img: ["src", "alt"],
-        "*": ["style"],
-      },
-    });
+    // start of the current month
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const { title, content } = req.body;
-    if (!title || !content) {
-      res.status(400).json({ message: "All fields are required" });
-    }
-    const slugBase = slugify(title, { lower: true });
-    const uniqueSlug = `${slugBase}-${Date.now()}`;
-    const post = await Post.create({
-      title: cleanTitle,
-      content: cleanContent,
-      slug: uniqueSlug,
-      author: req.user.id,
-      publishedAt: new Date(),
-    });
-    return res
-      .status(201)
-      .json({ message: "Post created successfully!", post });
+    // start of the current year
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+
+    const [weekly, monthly, yearly] = await Promise.all([
+      Post.countDocuments({ createdAt: { $gte: startOfWeek } }),
+      Post.countDocuments({ createdAt: { $gte: startOfMonth } }),
+      Post.countDocuments({ createdAt: { $gte: startOfYear } }),
+    ]);
+    console.log("Post stats", { weekly, monthly, yearly });
+    return res.status(200).json({ weekly, monthly, yearly });
   } catch (error) {
-    console.error("Post.create() failed ➜", error); // <— keep this!
-    return res.status(500).json({ message: "Failed to create post" });
+    return res.status(500).json({ message: "Failed to fetch post stats" });
   }
 };
 
+// total posts per user
+exports.totalPostsPerUser = async (req, res) => {
+  try {
+    const result = await Post.aggregate([
+      // stage 1
+      {
+        $group: {
+          _id: "$author", // Group all posts by author ID
+          totalPosts: { $sum: 1 }, // Count how many posts per author
+        },
+      },
+      // stage 2
+      {
+        $lookup: {
+          from: "users", // Name of the collection to join with
+          localField: "_id", // Field from this pipeline (author id)
+          foreignField: "_id", // Field from 'users' collection to match with
+          as: "authorInfo", // The joined user document will appear under this field
+        },
+      },
+      // stage 3
+      {
+        $unwind: "$authorInfo", // flattens the authorInfo array into single object
+      },
+      // stage 4
+      {
+        $project: {
+          _id: 0,
+          authorName: "$authorInfo.name",
+          authorEmail: "$authorInfo.email",
+          totalPosts: 1,
+        },
+      },
+      // stage 5
+      {
+        $sort: { toatalPosts: -1 }, // this sorts the authors by total posts in descending order, so the most activeauthors come first
+      },
+    ]);
+    console.log("count:", result);
+    res.status(200).json(result);
+  } catch (error) {
+    console.log("Aggregation error:", error);
+    res.status(500).json({ message: "server error" });
+  }
+};
+
+// create post
+exports.createPost = async (req, res) => {
+  try {
+    const { title, content, category } = req.body;
+    const file = req.file;
+    console.log("file:", req.file);
+
+    if (!title || !content || !file) {
+      return res
+        .status(400)
+        .json({ message: "All fields including image are required" });
+    }
+    const uploaded = await ImageKit.upload({
+      file: file.buffer,
+      fileName: file.originalname,
+      folder: "/blogs",
+    });
+    const imageURl = uploaded.url; //  use this directly
+
+    const post = new Post({
+      image: imageURl,
+      title,
+      content,
+      category: category || "Uncategorized",
+      slug: slugify(title, { lower: true }) + "-" + Date.now(),
+      author: req.user._id,
+      publishedAt: new Date(),
+    });
+
+    await post.save();
+
+    return res.status(201).json({ message: "Post created", post });
+  } catch (err) {
+    console.error("❌ Error creating post:", err);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 // getAll posts (public feed)
 exports.getAllPosts = async (req, res) => {
   // console.log("POST GET BODY:", req.body);

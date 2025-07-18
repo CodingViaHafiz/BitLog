@@ -10,9 +10,18 @@ const {
   deletePost,
   getAdminAllposts,
   getOwnPosts,
+  totalPostsPerUser,
+  getPostStats,
 } = require("../controllers/postController");
+const upload = require("../middleWare/uploadMiddleware");
 const router = express.Router();
 // router.get("/profile", protect, profile);
+
+// get Post stats
+router.get("/stats", protect, adminOnly, getPostStats);
+
+// posts authorCount
+router.get("/author-count", protect, adminOnly, totalPostsPerUser);
 
 //get All posts route
 router.get("/feed", protect, getAllPosts);
@@ -24,7 +33,7 @@ router.get("/me", protect, getOwnPosts); // must be before `/:id`
 router.get("/:id", protect, getOnePost);
 
 // create post route
-router.post("/create", protect, createPost);
+router.post("/create", protect, upload.single("file"), createPost);
 
 // update post route
 router.put("/:id", protect, updatePost);

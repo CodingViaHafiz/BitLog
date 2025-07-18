@@ -11,25 +11,25 @@ const Navbar = () => {
   const { user } = useSelector((state) => state.auth)
 
   const navLinks = [
-    { to: "/feed", label: "Feed" },
-    { to: "/posts/create", label: "Create Post" },
-    { to: "/me", label: "My Account" },
+    { to: "/app/feed", label: "Feed" },
+    { to: "/app/posts/create", label: "Create Post" },
+    { to: "/app/me", label: "My Account" },
   ];
   const handleLogout = () => {
     dispatch(logoutUser())
   }
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50 border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center relative">
+    <header className="bg-transparent backdrop-blur-sm shadow-md sticky top-0 z-50 border-b border-fontblue">
+      <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative">
 
         {/* Left: Logo */}
-        <Link to="/" className="text-2xl font-bold text-fontText">
+        <Link to="/app/feed" className="text-2xl font-bold text-fontblue">
           BitLog
         </Link>
 
         {/* Center: Links (desktop) */}
-        <nav className="hidden md:flex space-x-6 text-md font-semibold text-fontText absolute left-1/2 transform -translate-x-1/2">
+        <nav className="hidden md:flex space-x-6 text-xl font-semibold text-fontblue absolute left-1/2 transform -translate-x-1/2">
           {navLinks.map((link) => (
             <Link
               key={link.to}
@@ -48,7 +48,7 @@ const Navbar = () => {
         <div className="hidden md:block">
           <button
             onClick={handleLogout}
-            className="px-4 py-1 text-fontText border border-fontText rounded-full hover:bg-headingText hover:text-white transition"
+            className="px-4 py-1 text-md font-semibold text-fontblue border border-fontblue rounded-full hover:bg-hoverColor hover:text-white  transition"
           >
             Logout
           </button>
@@ -56,7 +56,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Icon */}
         <button
-          className="md:hidden text-fontText focus:outline-none"
+          className="md:hidden text-fontColor focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -72,7 +72,7 @@ const Navbar = () => {
             exit={{ opacity: 0, y: -10 }}
             className="md:hidden bg-white border-t border-gray-200 shadow px-6 pt-4 pb-6"
           >
-            <nav className="flex flex-col space-y-4 text-fontText text-md font-medium">
+            <nav className="flex flex-col space-y-4 text-fontColor text-md font-medium">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
