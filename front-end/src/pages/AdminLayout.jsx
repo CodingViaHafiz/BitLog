@@ -6,7 +6,7 @@ const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-[80px] flex">
+    <div className="min-h-screen bg-white pt-[80px] flex">
 
       <aside
         className={`bg-white w-64 fixed top-[80px] left-0 h-[calc(100vh-80px)] z-30 border-r border-gray-200 shadow-md p-6 transition-transform duration-300 ease-in-out

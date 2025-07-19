@@ -42,7 +42,7 @@ const AdminPage = () => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="max-w-4xl mx-auto"
+      className=" mx-auto"
     >
       <h1 className="text-3xl font-bold text-fontblue text-center mb-6">📊 Admin Dashboard</h1>
 
@@ -51,8 +51,8 @@ const AdminPage = () => {
         <p className="text-gray-600">Monitor posts & users from your panel</p>
       </div>
 
-      <div className="bg-white shadow rounded-2xl p-6">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+      <div className="bg-white  p-6">
+        <h3 className="text-xl font-semibold text-fontblue mb-4 flex items-center gap-2">
           🧭 Post Activity Overview
         </h3>
         {statsLoading ? (

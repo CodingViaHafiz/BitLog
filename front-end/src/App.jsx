@@ -32,6 +32,8 @@ function App() {
     return <p className="text-center mt-20">Initializing...</p>;
   }
 
+  // if you want to keep any page or component centered use this (max-w-7xl mx-auto )
+
   return (
     <Router>
       <Routes>

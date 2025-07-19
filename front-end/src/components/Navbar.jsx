@@ -21,7 +21,7 @@ const Navbar = () => {
 
   return (
     <header className="bg-transparent backdrop-blur-sm shadow-md sticky top-0 z-50 border-b border-fontblue">
-      <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center relative">
+      <div className=" px-6 py-6 flex justify-between items-center relative">
 
         {/* Left: Logo */}
         <Link to="/app/feed" className="text-2xl font-bold text-fontblue">

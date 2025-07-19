@@ -23,7 +23,7 @@ const FeedPage = () => {
 
   return (
     <motion.div
-      className="p-6 max-w-7xl mx-auto"
+      className="p-6 "
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -99,45 +99,55 @@ const FeedPage = () => {
               transition={{ duration: 0.5 }}
               className="cursor-pointer"
             >
-              <div className="h-full bg-white/60 backdrop-blur-md border  rounded-2xl hover:shadow-2xl hover:border-fontColor transition duration-300 overflow-hidden flex flex-col">
-                {/* Author Info */}
-                <div className="flex items-center gap-4 bg-white p-4">
-                  <div className="w-12 h-12 bg-fontColor rounded-full text-white flex items-center justify-center text-lg font-bold shadow-md">
-                    {post.author?.name?.charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <p className="text-gray-700 font-semibold text-sm">
-                      {post.author?.name}
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      {new Date(post.createdAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
+              <div className="h-full bg-white/70 backdrop-blur-lg border border-gray-200 rounded-2xl shadow hover:shadow-2xl hover:-translate-y-1 transition duration-300 overflow-hidden flex flex-col group">
 
-                {/* Post Content */}
-                <div className="flex-grow p-5 flex flex-col">
-                  {post.image ? (
+                {/* Post Image */}
+                {post.image ? (
+                  <div className="relative h-60 overflow-hidden">
                     <img
                       src={post.image}
                       alt="Post"
-                      className="rounded-xl mb-4 w-full h-60 object-cover"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                  ) : (
-                    <div className="h-60 bg-gray-200 flex items-center justify-center text-gray-500 text-sm italic mb-4 rounded-xl">
-                      No Image Available
-                    </div>
-                  )}
-                  <h2 className="text-xl font-bold text-gray-800 mb-2">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                  </div>
+                ) : (
+                  <div className="h-60 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-500 text-sm italic mb-4 rounded-t-2xl">
+                    No Image Available
+                  </div>
+                )}
+
+                {/* Content */}
+                <div className="flex-grow p-5 flex flex-col">
+                  {/* Title */}
+                  <h2 className="text-xl font-bold text-fontblue group-hover:text-black transition mb-1">
                     {post.title}
                   </h2>
+
+                  {/* Preview */}
                   <p
-                    className="text-gray-700 text-sm leading-relaxed prose"
+                    className="text-gray-600 text-sm leading-relaxed line-clamp-4 mb-4"
                     dangerouslySetInnerHTML={{ __html: contentPreview }}
                   />
+
+                  {/* Author Info */}
+                  <div className="flex items-center mt-auto gap-3 pt-4 border-t border-gray-200">
+                    <div className="w-10 h-10 bg-fontColor text-white rounded-full flex items-center justify-center font-semibold">
+                      {post.author?.name?.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800">
+                        {post.author?.name}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        {new Date(post.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
+
           );
         })}
       </div >
