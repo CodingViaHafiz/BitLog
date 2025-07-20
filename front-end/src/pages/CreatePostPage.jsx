@@ -40,7 +40,7 @@ const CreatePostPage = () => {
     >
       {/* Page Heading */}
       <motion.h1
-        className="text-3xl font-bold text-fontColor mb-6 text-center"
+        className="text-3xl font-bold text-emerald-500 mb-6 text-center"
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2, type: 'spring', stiffness: 60 }}
@@ -74,7 +74,7 @@ const CreatePostPage = () => {
             placeholder="Enter Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border border-fontColor focus:outline-none focus:ring-1 focus:ring-fontColor px-4 py-2 rounded-xl"
+            className="w-full  focus:outline-none focus:ring-1 focus:ring-emerald-500 px-4 py-2 rounded-xl"
             required
           />
         </motion.div>
@@ -93,7 +93,7 @@ const CreatePostPage = () => {
               type="file"
               accept="image/*"
               onChange={(e) => setFile(e.target.files[0])}
-              className="w-full border px-4 py-2 rounded-xl"
+              className="w-full px-4 py-2 rounded-xl"
               required
             />
           </div>
@@ -103,7 +103,7 @@ const CreatePostPage = () => {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-[150px] focus:outline-none focus:ring-1 focus:ring-fontColor text-fontColor border-1 border-fontColor  px-4 py-2 rounded-xl"
+              className="w-[150px] focus:outline-none focus:ring-1 focus:ring-emerald-500 text-emerald-500 border-1 border-emerald-500  px-4 py-2 rounded-xl"
               required
             >
               <option value="" disabled>Select Category</option>
@@ -139,6 +139,7 @@ const CreatePostPage = () => {
           variants={{
             hidden: { opacity: 0, y: 20 },
             visible: { opacity: 1, y: 0 },
+
           }}
         >
           <Editor
@@ -170,7 +171,7 @@ const CreatePostPage = () => {
             type="submit"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-fontColor text-white px-6 py-2 rounded-xl hover:bg-headingText/90 transition"
+            className="bg-emerald-500 text-white px-6 py-2 rounded-xl hover:bg-emerald-600 transition"
           >
             Publish Post
           </motion.button>
