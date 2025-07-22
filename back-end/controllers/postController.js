@@ -22,14 +22,16 @@ exports.getPostStats = async (req, res) => {
 
     // start of the current year
     const startOfYear = new Date(now.getFullYear(), 0, 1);
+    // total posts
 
-    const [weekly, monthly, yearly] = await Promise.all([
+    const [weekly, monthly, yearly, all] = await Promise.all([
       Post.countDocuments({ createdAt: { $gte: startOfWeek } }),
       Post.countDocuments({ createdAt: { $gte: startOfMonth } }),
       Post.countDocuments({ createdAt: { $gte: startOfYear } }),
+      Post.countDocuments(),
     ]);
-    console.log("Post stats", { weekly, monthly, yearly });
-    return res.status(200).json({ weekly, monthly, yearly });
+    console.log("Post stats", { weekly, monthly, yearly, all });
+    return res.status(200).json({ weekly, monthly, yearly, all });
   } catch (error) {
     return res.status(500).json({ message: "Failed to fetch post stats" });
   }

@@ -30,3 +30,13 @@ exports.fetchUser = async (req, res) => {
   console.log("[FETCH USER] /users/my called. req.user:", req.user);
   return res.status(200).json(req.user);
 };
+
+exports.TotalUsers = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    console.log(totalUsers);
+    return res.status(200).json({ totalUsers });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+};

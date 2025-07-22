@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllPosts } from '../features/post/postSlice';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { showLoader } from '../features/loader/loaderSlice';
 
 const FeedPage = () => {
   const dispatch = useDispatch();
@@ -10,23 +11,39 @@ const FeedPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
-  const filteredPosts = searchQuery.trim()
-    ? posts.filter((post) =>
+  const categories = ['All', 'Technology', 'Health', 'Education', 'Travel', 'Food', 'News'];
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+
+  const filteredPosts = posts.filter((post) => {
+    const matchesSearch =
       post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.content?.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    : posts;
+      post.content?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCategory =
+      selectedCategory === "All" ||
+      post.category?.toLowerCase() === selectedCategory.toLowerCase();
+
+    return matchesSearch && matchesCategory;
+  });
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+
 
   useEffect(() => {
+    dispatch(showLoader())
     dispatch(fetchAllPosts());
   }, [dispatch]);
 
   return (
     <motion.div
       className="p-6 "
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: -40 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.6 }}
     >
       {/* HEADER */}
       <div className="flex flex-col items-center text-center md:mt-[60px] mb-10">
@@ -59,6 +76,27 @@ const FeedPage = () => {
           className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2 px-5 py-3 rounded-xl bg-white/60 shadow-inner border border-gray-300 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all duration-300 text-emerald-500 text-sm"
         />
       </div>
+
+      {/* CATEGORY FILTER */}
+      <div className="relative mb-8">
+        <hr className="border-t border-gray-300 mb-4" />
+        <div className="flex flex-wrap justify-center gap-3">
+          {categories.map((post) => (
+            <button
+              key={post}
+              onClick={() => setSelectedCategory(post)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all 
+          ${selectedCategory === post
+                  ? 'bg-emerald-500 text-white shadow'
+                  : 'bg-white text-emerald-600 border border-emerald-300 hover:bg-emerald-100'}
+        `}
+            >
+              {post}
+            </button>
+          ))}
+        </div>
+      </div>
+
 
       {/* LOADING / ERROR MESSAGES */}
       {loading && (

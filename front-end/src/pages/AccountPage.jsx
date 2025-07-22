@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deletePost, fetchMyPosts, updatePost } from "../features/post/postSlice";
 import { Link } from 'react-router-dom';
@@ -45,6 +45,10 @@ const AccountPage = () => {
       dispatch(deletePost({ id }));
     }
   };
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
 
   return (
     <motion.div

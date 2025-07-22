@@ -96,7 +96,7 @@ const PostDetail = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => navigate(user.role === "admin" ? "/app/admin/posts" : "/app/feed")}
+          onClick={() => navigate(user.role === "admin" ? "/admin/posts" : "/app/feed")}
           className="text-emerald-500 hover:bg-emerald-50 px-6 py-2 rounded-xl font-semibold border border-emerald-500  transition-all"
         >
           Back

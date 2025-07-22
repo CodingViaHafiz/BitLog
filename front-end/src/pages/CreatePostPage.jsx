@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
+import 'tinymce/tinymce'; // Core
+import 'tinymce/icons/default'; // Icons
+import 'tinymce/themes/silver'; // Theme
+
+// Required plugins
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/code';
+import 'tinymce/plugins/image';
+import 'tinymce/plugins/table';
+import 'tinymce/plugins/preview';
+
 import { useDispatch } from 'react-redux';
 import { createPost, fetchAllPosts } from '../features/post/postSlice';
 import { useNavigate } from 'react-router-dom';
@@ -107,11 +119,12 @@ const CreatePostPage = () => {
               required
             >
               <option value="" disabled>Select Category</option>
-              <option value="technology">Technology</option>
-              <option value="lifestyle">Lifestyle</option>
-              <option value="education">Education</option>
-              <option value="travel">Travel</option>
-              <option value="news">News</option>
+              <option value="Technology">Technology</option>
+              <option value="Health">Health</option>
+              <option value="Education">Education</option>
+              <option value="News">News</option>
+              <option value="Travel">Travel</option>
+              <option value="Food">Food</option>
             </select>
           </div>
         </motion.div>
@@ -143,21 +156,20 @@ const CreatePostPage = () => {
           }}
         >
           <Editor
-            apiKey="z43igi6uxlih9byfjt5szosrk89qu9prnylbztf9umdn4ckc"
-            value={content}
-            onEditorChange={(newValue) => setContent(newValue)}
+            tinymceScriptSrc="/tinymce/tinymce.min.js" // tells it where to load TinyMCE core
             init={{
-              height: 300,
+              height: 500,
               menubar: false,
               plugins: [
-                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor',
-                'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                'link', 'lists', 'code', 'image', 'table', 'preview'
               ],
-              toolbar:
-                'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+              toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image preview code',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+              base_url: '/tinymce', // tells it where to load models/plugins/themes
+              suffix: '.min'
             }}
           />
+
         </motion.div>
 
         {/* 🔹 SUBMIT BUTTON */}

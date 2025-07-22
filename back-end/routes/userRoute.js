@@ -5,6 +5,7 @@ const {
   getAllUsers,
   deleteUser,
   fetchUser,
+  TotalUsers,
 } = require("../controllers/userController");
 
 // get all users route
@@ -15,5 +16,7 @@ router.delete("/:id", protect, adminOnly, deleteUser);
 
 // fetch user
 router.get("/my", protect, fetchUser);
+// get totalUsers
+router.get("/userStats", protect, adminOnly, TotalUsers);
 
 module.exports = router;

@@ -22,8 +22,8 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/70 dark:bg-gray-900/80 backdrop-blur-md shadow-md border-b border-gray-200 dark:border-gray-700">
-      <div className="relative px-6 py-5 flex justify-between items-center max-w-7xl mx-auto">
+    <header className="sticky top-0 z-50 bg-emerald-50 dark:bg-gray-900/80 backdrop-blur-md shadow-md border-b border-gray-200 dark:border-gray-700">
+      <div className="relative px-6 py-5 flex justify-between items-center ">
 
         {/* Left: Logo */}
         <Link to="/app/feed" className="text-2xl font-bold text-emerald-500 dark:text-emerald-400">
@@ -31,7 +31,7 @@ const Navbar = () => {
         </Link>
 
         {/* Center: Nav Links (Desktop) */}
-        <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-8 text-base font-semibold">
+        <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-8  font-semibold text-lg">
           {navLinks.map((link) => (
             <Link
               key={link.to}
@@ -51,7 +51,7 @@ const Navbar = () => {
         <div className="hidden md:block">
           <button
             onClick={handleLogout}
-            className="px-4 py-1.5 text-sm font-medium rounded-full border border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white transition dark:border-emerald-300 dark:text-emerald-300 dark:hover:bg-emerald-300 dark:hover:text-black"
+            className="px-4 py-1.5 text-md font-medium rounded-full border border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white transition dark:border-emerald-300 dark:text-emerald-300 dark:hover:bg-emerald-300 dark:hover:text-black"
           >
             Logout
           </button>
@@ -73,7 +73,7 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow px-6 pt-4 pb-6"
+            className="md:hidden bg-emerald-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow px-6 pt-4 pb-6"
           >
             <nav className="flex flex-col space-y-4 text-emerald-600 dark:text-emerald-300 text-md font-medium">
               {navLinks.map((link) => (

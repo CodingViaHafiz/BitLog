@@ -4,7 +4,10 @@ import {
   isRejectedWithValue,
 } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { hideLoader, showLoader } from "../loader/loaderSlice";
 
+// const dispatch = useDispatch();
 const initialState = {
   posts: [],
   authorStats: [],
@@ -48,6 +51,7 @@ export const fetchAllPosts = createAsyncThunk(
   "posts/fetch",
   async (_, { rejectWithValue }) => {
     try {
+      // dispatch(showLoader());
       const res = await axios.get("/posts/feed", { withCredentials: true });
       console.log(res.data);
       return res.data;

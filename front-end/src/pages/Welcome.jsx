@@ -17,13 +17,13 @@ const WelcomePage = () => {
 
           {/* Heading from Top */}
           <motion.h1
-            className="text-5xl md:text-6xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fontColor"
+            className="text-5xl md:text-6xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600"
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 70, delay: 0.2 }}
           >
             Welcome to <br />
-            <span className="text-transparent bg-gradient-to-r from-blue-400 to-fontColor bg-clip-text "
+            <span className="text-transparent bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text "
 
             >BitLog</span>
           </motion.h1>
@@ -44,7 +44,7 @@ const WelcomePage = () => {
             onClick={() => user ? navigate("/app/feed") : navigate("/login")}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
-            className="px-6 py-3 bg-gradient-to-r from-blue-400 to-fontColor text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-200"
+            className="px-6 py-3 bg-gradient-to-r from-emerald-400 to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-200"
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 80, delay: 0.4 }}

@@ -19,6 +19,7 @@ import AdminRoute from './routes/AdminRoute.jsx';
 import AdminPosts from './pages/AdminPosts.jsx';
 import AdminManageUsers from './pages/AdminManageUsers.jsx';
 import AdminLayout from './pages/AdminLayout.jsx';
+import Loader from './components/Loader.jsx';
 
 function App() {
   const { initialized } = useSelector((state) => state.auth);
@@ -29,14 +30,16 @@ function App() {
   }, [dispatch]);
 
   if (!initialized) {
-    return <p className="text-center mt-20">Initializing...</p>;
+    return <Loader />; // Your custom loader component
   }
+
 
   // if you want to keep any page or component centered use this (max-w-7xl mx-auto )
 
   return (
     <Router>
       <Routes>
+        {/* <Loader /> */}
         {/* Public routes */}
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<LoginPage />} />
@@ -51,14 +54,13 @@ function App() {
             <Route path="feed" element={<FeedPage />} />
             <Route path="me" element={<AccountPage />} />
             <Route path="posts/:id" element={<PostDetail />} />
-
-            {/* Admin Protected Routes */}
-            <Route element={<AdminRoute />}>
-              <Route path="admin" element={<AdminLayout />}>
-                <Route path="all" element={<AdminPage />} />
-                <Route path="users" element={<AdminManageUsers />} />
-                <Route path="posts" element={<AdminPosts />} />
-              </Route>
+          </Route>
+          {/* Admin Protected Routes */}
+          <Route element={<AdminRoute />}>
+            <Route path="admin" element={<AdminLayout />}>
+              <Route path="all" element={<AdminPage />} />
+              <Route path="users" element={<AdminManageUsers />} />
+              <Route path="posts" element={<AdminPosts />} />
             </Route>
           </Route>
         </Route>

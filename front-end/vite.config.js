@@ -13,4 +13,11 @@ export default defineConfig({
     },
     // historyApiFallback: true, // add this line
   },
+  optimizeDeps: {
+    include: [
+      "tinymce/tinymce",
+      "tinymce/icons/default",
+      "tinymce/themes/silver",
+    ],
+  },
 });

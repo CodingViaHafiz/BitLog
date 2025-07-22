@@ -1,12 +1,29 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+// import { TotalUsers } from "../../../../back-end/controllers/userController";
 
 const initialState = {
   user: null,
   loading: false,
   error: null,
   initialized: false,
+  totalUsers: 0,
 };
+// toalUsers
+export const userStats = createAsyncThunk(
+  "user/stats",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axios.get("/users/userStats", {
+        withCredentials: true,
+      });
+      console.log("user stats:", res.data);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 
 //login thunk
 export const loginUser = createAsyncThunk(
@@ -155,12 +172,25 @@ const authSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-        state.initialized = true;
+        state.initialized = true; // ✅ important
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.initialized = true;
+      })
+      // user stats
+      .addCase(userStats.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(userStats.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
+      })
+      .addCase(userStats.fulfilled, (state, action) => {
+        state.loading = false;
+        state.totalUsers = action.payload.totalUsers;
       });
   },
 });

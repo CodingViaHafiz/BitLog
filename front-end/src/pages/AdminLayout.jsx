@@ -1,32 +1,60 @@
-import React, { useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
-import { FiMenu } from 'react-icons/fi';
+import React, { useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { FiMenu } from "react-icons/fi";
+import { FaUsers, FaHome, FaClipboardList } from "react-icons/fa";
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  const navLinks = [
+    { to: "/admin/all", label: "Dashboard", icon: <FaHome /> },
+    { to: "/admin/users", label: "Manage Users", icon: <FaUsers /> },
+    { to: "/admin/posts", label: "Manage Posts", icon: <FaClipboardList /> },
+  ];
 
   return (
-    <div className="min-h-screen bg-white pt-[80px] flex">
-
+    <div className="min-h-screen flex bg-gray-50">
+      {/* Sidebar */}
       <aside
-        className={`bg-white w-64 fixed top-[80px] left-0 h-[calc(100vh-80px)] z-30 border-r border-gray-200 shadow-md p-6 transition-transform duration-300 ease-in-out
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
+        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-30 transform transition-transform duration-300 ease-in-out border-r border-gray-200
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
-        <h2 className="text-2xl font-bold text-indigo-700 mb-6">Admin Panel</h2>
-        <nav className="space-y-4">
-          <Link to="/app/admin/all" className="block text-gray-700 hover:text-indigo-600">🏠 Dashboard</Link>
-          <Link to="/app/admin/users" className="block text-gray-700 hover:text-indigo-600">👥 Manage Users</Link>
-          <Link to="/app/admin/posts" className="block text-gray-700 hover:text-indigo-600">📝 Manage Posts</Link>
+        <div className="p-6 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-emerald-600 tracking-tight">
+            Admin Panel
+          </h2>
+        </div>
+        <nav className="p-4 space-y-3">
+          {navLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className={`flex items-center px-4 py-2 rounded-lg transition-all duration-200 font-medium 
+                ${location.pathname === link.to
+                  ? "bg-emerald-100 text-emerald-700"
+                  : "text-gray-600 hover:bg-gray-100 hover:text-emerald-600"
+                }`}
+            >
+              <span className="text-lg mr-3">{link.icon}</span>
+              {link.label}
+            </Link>
+          ))}
         </nav>
       </aside>
 
-      <div className="lg:hidden fixed top-[90px] left-4 z-40">
-        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-2xl text-indigo-600">
+      {/* Mobile Toggle */}
+      <div className="lg:hidden fixed top-4 left-4 z-40">
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="text-3xl text-emerald-600 hover:text-emerald-800 transition"
+        >
           <FiMenu />
         </button>
       </div>
 
-      <main className="flex-1 lg:ml-64 px-4 pb-12 w-full">
+      {/* Main Content */}
+      <main className="flex-1 lg:ml-64 p-6 pt-8 transition-all duration-300">
         <Outlet />
       </main>
     </div>

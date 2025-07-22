@@ -39,7 +39,7 @@ const SignupPage = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="bg-white/60 p-8 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-fontColor mb-6">
+        <h2 className="text-2xl font-bold text-center text-emerald-500 mb-6">
           Sign Up
         </h2>
 
@@ -53,7 +53,7 @@ const SignupPage = () => {
             placeholder="Full Name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-fontColor rounded-md focus:outline-none focus:ring-1 focus:ring-fontColor"
+            className="w-full px-4 py-2 border border-emerald-500 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-500"
             required
           />
 
@@ -63,7 +63,7 @@ const SignupPage = () => {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-fontColor rounded-md focus:outline-none focus:ring-1 focus:ring-fontColor"
+            className="w-full px-4 py-2 border border-emerald-500 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-500"
             required
           />
 
@@ -73,14 +73,14 @@ const SignupPage = () => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-fontColor rounded-md focus:outline-none focus:ring-1 focus:ring-fontColor"
+            className="w-full px-4 py-2 border border-emerald-500 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-500"
             required
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-fontColor text-white hover:text-fontColor border hover:border-fontColor py-2 font-semibold rounded-md hover:bg-white transition"
+            className="w-full bg-emerald-500 text-white hover:text-emerald-500 border hover:border-emerald-500 py-2 font-semibold rounded-md hover:bg-white transition"
           >
             {loading ? "Creating Account..." : "Sign Up"}
           </button>
