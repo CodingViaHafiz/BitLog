@@ -116,7 +116,7 @@ exports.createPost = async (req, res) => {
 
     return res.status(201).json({ message: "Post created", post });
   } catch (err) {
-    console.error("❌ Error creating post:", err);
+    console.error(" Error creating post:", err);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -194,7 +194,8 @@ exports.deletePost = async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: "post not found" });
     }
-    if (post.author.toString() !== req.user.id) {
+    // && means: block only if not author AND not admin → this is correct.
+    if (post.author.toString() !== req.user.id && req.user.role !== "admin") {
       return res.status(403).json({ message: "Unauthorized" });
     }
     await post.deleteOne();
@@ -203,6 +204,7 @@ exports.deletePost = async (req, res) => {
     return res.status(500).json({ message: "Failed to delete post" });
   }
 };
+
 // Admin : view all posts
 exports.getAdminAllposts = async (req, res) => {
   try {
