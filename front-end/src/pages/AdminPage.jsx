@@ -7,36 +7,25 @@ import { motion } from 'framer-motion';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import Loader from "../components/Loader";
-import { showLoader } from '../features/loader/loaderSlice';
+import { hideLoader, showLoader } from '../features/loader/loaderSlice';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const AdminPage = () => {
   const dispatch = useDispatch();
-  const {
-    user,
-    loading: userLoading,
-    totalUsers,
-    initialized
-  } = useSelector((state) => state.auth);
+  const { user, loading: userLoading, totalUsers, initialized } = useSelector((state) => state.auth);
+  const { loading: statsLoading, postStats } = useSelector((state) => state.posts);
+  const loading = useSelector((state) => state.loader.loading);
 
-  const {
-    loading: statsLoading,
-    postStats
-  } = useSelector((state) => state.posts);
-
-  // Initial load: Fetch user and post stats
   useEffect(() => {
     dispatch(showLoader());
-
     if (!user && !initialized) {
       dispatch(fetchUser());
     }
-
+    dispatch(hideLoader());
     dispatch(getPostStats());
   }, [dispatch, user, initialized]);
 
-  // Fetch user stats only if admin and stats not fetched
   useEffect(() => {
     if (user?.role === 'admin' && totalUsers === 0) {
       dispatch(userStats());
@@ -66,18 +55,20 @@ const AdminPage = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-6xl mx-auto px-4 py-10"
+      className="min-h-screen w-full overflow-x-hidden bg-white dark:bg-gray-900 px-4 sm:px-6 lg:px-8 max-w-screen-2xl mx-auto py-10"
     >
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
+
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-center flex-wrap gap-2 mb-8">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-emerald-600">
           📊 Admin Dashboard
         </h1>
-        <span className="text-md sm:text-lg text-gray-700 mt-2 sm:mt-0">
+        <span className="text-md sm:text-lg text-gray-700">
           Welcome, <span className="font-semibold">{user.name}</span>
         </span>
       </div>
 
-      {/* Post Stats */}
+      {/* Post Stats Cards */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
         initial="hidden"
@@ -93,7 +84,7 @@ const AdminPage = () => {
           <motion.div
             key={index}
             whileHover={{ y: -4 }}
-            className="bg-white/80 backdrop-blur-md shadow-md border border-gray-100 rounded-2xl p-6 flex flex-col items-center justify-center transition-all"
+            className="bg-white/90 backdrop-blur-md shadow-md border border-gray-100 rounded-2xl p-6 flex flex-col items-center justify-center transition-all"
             variants={{
               hidden: { opacity: 0, y: 10 },
               visible: { opacity: 1, y: 0 }
@@ -116,7 +107,7 @@ const AdminPage = () => {
       >
         <motion.div
           whileHover={{ y: -4 }}
-          className="bg-white/80 backdrop-blur-md shadow-md border border-gray-100 rounded-2xl p-6 flex flex-col items-center justify-center"
+          className="bg-white/90 backdrop-blur-md shadow-md border border-gray-100 rounded-2xl p-6 flex flex-col items-center justify-center"
           variants={{
             hidden: { opacity: 0, y: 10 },
             visible: { opacity: 1, y: 0 }
@@ -131,7 +122,7 @@ const AdminPage = () => {
 
       {/* Chart Section */}
       <motion.div
-        className="bg-white/80 backdrop-blur-md border border-gray-100 shadow-xl rounded-2xl p-8"
+        className="bg-white/90 backdrop-blur-md border border-gray-100 shadow-xl rounded-2xl p-6 md:p-8"
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
@@ -140,17 +131,21 @@ const AdminPage = () => {
           📈 Post Activity Overview
         </h3>
 
-        <div className="flex justify-center items-center min-h-[300px]">
+        <div className="flex justify-center items-center w-full">
           {statsLoading ? (
             <Loader />
           ) : (
-            <Doughnut data={chartData} options={{ responsive: true }} />
+            <div className="w-full max-w-[400px] aspect-square">
+              <Doughnut
+                data={chartData}
+                options={{ responsive: true, maintainAspectRatio: false }}
+              />
+            </div>
           )}
         </div>
       </motion.div>
     </motion.div>
   );
-
 };
 
 export default AdminPage;

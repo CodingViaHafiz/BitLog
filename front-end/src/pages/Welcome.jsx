@@ -12,10 +12,8 @@ const WelcomePage = () => {
     <div className="min-h-screen  flex items-center justify-center px-6 py-12 overflow-hidden">
       <div className="max-w-6xl w-full flex flex-col-reverse md:flex-row items-center gap-12">
 
-        {/* LEFT SECTION */}
         <div className="flex-1 text-center md:text-left space-y-6">
 
-          {/* Heading from Top */}
           <motion.h1
             className="text-5xl md:text-6xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600"
             initial={{ y: -100, opacity: 0 }}
@@ -28,7 +26,6 @@ const WelcomePage = () => {
             >BitLog</span>
           </motion.h1>
 
-          {/* Description from Left */}
           <motion.p
             className="text-lg text-gray-600 max-w-xl"
             initial={{ x: -100, opacity: 0 }}
@@ -39,7 +36,6 @@ const WelcomePage = () => {
             and be part of something meaningful.
           </motion.p>
 
-          {/* Button from Bottom */}
           <motion.button
             onClick={() => user ? navigate("/app/feed") : navigate("/login")}
             whileHover={{ scale: 1.05 }}
@@ -64,9 +60,6 @@ const WelcomePage = () => {
             src={welcomeImg}
             alt="Blog Illustration"
             className="w-full h-[460px] max-w-md rounded-[90px]"
-            animate={{
-              y: [0, -10, 0], // Gentle float
-            }}
             transition={{
               duration: 4,
               repeat: Infinity,

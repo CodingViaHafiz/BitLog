@@ -29,9 +29,13 @@ function App() {
     dispatch(fetchUser());
   }, [dispatch]);
 
-  if (!initialized) {
-    return <Loader />; // Your custom loader component
-  }
+  // if (!initialized) {
+  //   return <Loader />; // Your custom loader component
+  // }
+  const loading = useSelector((state) => state.loader.loading);
+
+  if (!initialized) return <Loader />;
+
 
 
   // if you want to keep any page or component centered use this (max-w-7xl mx-auto )

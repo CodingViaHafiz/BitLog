@@ -4,12 +4,15 @@ import { fetchAllPosts } from '../features/post/postSlice';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { showLoader } from '../features/loader/loaderSlice';
+import Loader from '../components/Loader';
 
 const FeedPage = () => {
+
   const dispatch = useDispatch();
   const { posts, loading, error } = useSelector((state) => state.posts);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  // if (loading) return <Loader />;
 
   const categories = ['All', 'Technology', 'Health', 'Education', 'Travel', 'Food', 'News'];
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -34,7 +37,7 @@ const FeedPage = () => {
 
 
   useEffect(() => {
-    dispatch(showLoader())
+    // dispatch(showLoader())
     dispatch(fetchAllPosts());
   }, [dispatch]);
 
