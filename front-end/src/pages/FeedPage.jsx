@@ -103,9 +103,10 @@ const FeedPage = () => {
 
       {/* LOADING / ERROR MESSAGES */}
       {loading && (
-        <p className="text-blue-500 animate-pulse text-lg font-medium mb-4 text-center">
-          Loading posts...
-        </p>
+        // <p className="text-blue-500 animate-pulse text-lg font-medium mb-4 text-center">
+        //   Loading posts...
+        // </p>
+        <Loader />
       )}
       {error && (
         <p className="text-red-600 text-md font-semibold mb-4 text-center">{error}</p>

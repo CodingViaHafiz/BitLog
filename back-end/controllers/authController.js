@@ -77,6 +77,14 @@ exports.login = async (req, res) => {
 
 // logout
 exports.logout = async (req, res) => {
-  res.clearCookie("token");
-  res.status(200).json({ message: "Logout successful" });
+  try {
+    res.cookie("token", "", {
+      httpOnly: true,
+      expiresIn: new Date(0),
+      path: "/",
+    });
+    res.status(200).json({ message: "Logout success!" });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
 };

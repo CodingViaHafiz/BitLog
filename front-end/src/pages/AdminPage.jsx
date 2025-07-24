@@ -55,9 +55,8 @@ const AdminPage = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen w-full overflow-x-hidden bg-white dark:bg-gray-900 px-4 sm:px-6 lg:px-8 max-w-screen-2xl mx-auto py-10"
+      className="px-4 sm:px-6 lg:px-8 max-w-screen-xl mx-auto py-10"
     >
-
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center flex-wrap gap-2 mb-8">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-emerald-600">
@@ -67,7 +66,7 @@ const AdminPage = () => {
           Welcome, <span className="font-semibold">{user.name}</span>
         </span>
       </div>
-
+      <h2 className='text-3xl text-emerald-500 font-bold'>Posts</h2>
       {/* Post Stats Cards */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
@@ -97,7 +96,7 @@ const AdminPage = () => {
           </motion.div>
         ))}
       </motion.div>
-
+      <h2 className='text-3xl text-emerald-500 font-bold'>Users</h2>
       {/* Total Users */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"

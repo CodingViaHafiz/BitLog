@@ -9,7 +9,7 @@ const WelcomePage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen  flex items-center justify-center px-6 py-12 overflow-hidden">
+    <div className="min-h-screen bg-emerald-100 flex items-center justify-center px-6 py-12 overflow-hidden">
       <div className="max-w-6xl w-full flex flex-col-reverse md:flex-row items-center gap-12">
 
         <div className="flex-1 text-center md:text-left space-y-6">

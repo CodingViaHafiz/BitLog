@@ -22,7 +22,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-emerald-50 dark:bg-gray-900/80 backdrop-blur-md shadow-md border-b border-gray-200 dark:border-gray-700">
+    <header className="sticky top-0 z-50 bg-emerald-100 dark:bg-gray-900/80 backdrop-blur-md shadow-md border-b border-gray-200 dark:border-gray-700">
       <div className="relative px-6 py-5 flex justify-between items-center ">
 
         {/* Left: Logo */}

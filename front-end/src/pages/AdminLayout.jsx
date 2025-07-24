@@ -15,7 +15,7 @@ const AdminLayout = () => {
 
   return (
     <div className="min-h-screen flex">
-      {/* Sidebar */}
+
       <aside
         className={`fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-30 transform transition-transform duration-300 ease-in-out border-r border-gray-200
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
@@ -43,7 +43,6 @@ const AdminLayout = () => {
         </nav>
       </aside>
 
-      {/* Mobile Toggle */}
       <div className="lg:hidden fixed top-4 left-4 z-40">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -53,7 +52,6 @@ const AdminLayout = () => {
         </button>
       </div>
 
-      {/* Main Content */}
       <main className="flex-1 lg:ml-64 p-6 pt-8 transition-all duration-300">
         <Outlet />
       </main>

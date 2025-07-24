@@ -2,7 +2,7 @@ import { Mail, Phone, MapPin } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-emerald-50 text-emerald-700 font-medium pt-10 pb-6 mt-10 border-t shadow-inner">
+    <footer className="bg-emerald-100 text-emerald-700 font-medium pt-10 pb-6 mt-10 border-t shadow-inner">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
 
         {/* Logo & Description */}

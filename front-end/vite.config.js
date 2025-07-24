@@ -5,13 +5,14 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: "0.0.0.0",
     proxy: {
-      // "/auth": {
-      //   target: "http://localhost:1000",
-      //   changeOrigin: true,
-      // },
+      "/auth": {
+        target: "http://localhost:1000",
+        changeOrigin: true,
+      },
     },
-    // historyApiFallback: true, // add this line
+    historyApiFallback: true, // add this line
   },
   optimizeDeps: {
     include: [
