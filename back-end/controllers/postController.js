@@ -89,6 +89,7 @@ exports.createPost = async (req, res) => {
     const { title, content, category } = req.body;
     const file = req.file;
     console.log("file:", req.file);
+    console.log({ title, category, file, content });
 
     if (!title || !content || !file) {
       return res

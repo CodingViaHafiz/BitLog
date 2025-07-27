@@ -30,11 +30,11 @@ const PostDetail = () => {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="max-w-4xl mx-auto mt-4 px-6 py-10  dark:bg-[#1a1a1a]/70 backdrop-blur-md transition-all duration-300"
+      className="max-w-5xl mx-auto mt-4 px-6 py-10  dark:bg-[#1a1a1a]/70 backdrop-blur-md transition-all duration-300"
     >
-      {/* Image Section with Overlay */}
+
       {post.image ? (
-        <div className="relative rounded-[90px] overflow-hidden mb-6 shadow-md">
+        <div className="relative rounded-[100px] overflow-hidden mb-6 shadow-md">
           <motion.img
             src={post.image}
             alt="Post cover"
@@ -51,12 +51,11 @@ const PostDetail = () => {
         </div>
       )}
 
-      {/* Title */}
+
       <h1 className="text-4xl text-center font-extrabold text-emerald-500  mb-6">
         {post.title}
       </h1>
 
-      {/* Author & Date */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 text-sm text-gray-600 dark:text-gray-300">
         <p>
           <span className="font-medium text-gray-800 dark:text-white">Author:</span> {post.author?.name}
@@ -66,7 +65,6 @@ const PostDetail = () => {
         </p>
       </div>
 
-      {/* Content */}
       <motion.div
         className="prose prose-lg max-w-none dark:prose-invert prose-img:rounded-xl prose-p:leading-relaxed prose-p:text-gray-700 dark:prose-p:text-gray-300"
         initial={{ opacity: 0 }}
@@ -81,7 +79,6 @@ const PostDetail = () => {
         ))}
       </motion.div>
 
-      {/* Actions */}
       <div className="mt-10 flex flex-wrap items-center gap-4">
         {user.role === "admin" && (
           <motion.button

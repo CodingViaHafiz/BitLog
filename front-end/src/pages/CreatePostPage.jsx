@@ -50,7 +50,7 @@ const CreatePostPage = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      {/* Page Heading */}
+
       <motion.h1
         className="text-3xl font-bold text-emerald-500 mb-6 text-center"
         initial={{ y: -40, opacity: 0 }}
@@ -74,7 +74,6 @@ const CreatePostPage = () => {
         }}
       >
 
-        {/* 🔹 TITLE INPUT */}
         <motion.div
           variants={{
             hidden: { opacity: 0, y: 20 },
@@ -91,7 +90,7 @@ const CreatePostPage = () => {
           />
         </motion.div>
 
-        {/* 🔹 IMAGE + CATEGORY side-by-side */}
+
         <motion.div
           className="flex flex-col md:flex-row md:items-center gap-4"
           variants={{
@@ -99,7 +98,7 @@ const CreatePostPage = () => {
             visible: { opacity: 1, y: 0 },
           }}
         >
-          {/* Image Input (80%) */}
+
           <div className="w-full md:basis-[80%] md:flex-shrink-0">
             <input
               type="file"
@@ -110,7 +109,6 @@ const CreatePostPage = () => {
             />
           </div>
 
-          {/* Category Select (20%) */}
           <div className="w-full md:basis-[20%] md:flex-shrink-0">
             <select
               value={category}
@@ -130,7 +128,6 @@ const CreatePostPage = () => {
         </motion.div>
 
 
-        {/* 🔹 Preview if image is selected */}
         {file && (
           <motion.div
             className="flex justify-start"
@@ -147,7 +144,7 @@ const CreatePostPage = () => {
           </motion.div>
         )}
 
-        {/* 🔹 TINYMCE CONTENT */}
+
         <motion.div
           variants={{
             hidden: { opacity: 0, y: 20 },
@@ -156,6 +153,8 @@ const CreatePostPage = () => {
           }}
         >
           <Editor
+            value={content}
+            onEditorChange={(newValue) => setContent(newValue)}
             tinymceScriptSrc="/tinymce/tinymce.min.js" // tells it where to load TinyMCE core
             init={{
               height: 500,
@@ -166,13 +165,13 @@ const CreatePostPage = () => {
               toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image preview code',
               content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
               base_url: '/tinymce', // tells it where to load models/plugins/themes
-              suffix: '.min'
+              suffix: '.min',
+              license_key: 'gpl' // license (tellls tinyMCE to use free gpl version) general public license
             }}
           />
 
         </motion.div>
 
-        {/* 🔹 SUBMIT BUTTON */}
         <motion.div
           variants={{
             hidden: { opacity: 0, scale: 0.9 },

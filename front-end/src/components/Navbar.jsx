@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../features/auth/authSlice";
 
@@ -10,6 +10,13 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
+  // console.log(useScroll())
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   const navLinks = [
     { to: "/app/feed", label: "Feed" },
@@ -21,87 +28,133 @@ const Navbar = () => {
     dispatch(logoutUser());
   };
 
+  // Variants for staggering child animations
+  const navbarVariants = {
+    initial: {},
+    animate: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    initial: { opacity: 0, y: -20 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-emerald-100 dark:bg-gray-900/80 backdrop-blur-md shadow-md border-b border-gray-200 dark:border-gray-700">
-      <div className="relative px-6 py-5 flex justify-between items-center ">
+    <header className="sticky top-0 z-50 bg-emerald-100/90 dark:bg-gray-900/70 backdrop-blur-lg shadow  dark:border-gray-800">
+      <motion.div
+        className="container mx-auto px-4 py-4 flex justify-between items-center"
+        variants={navbarVariants}
+        initial="initial"
+        animate="animate"
+      >
 
-        {/* Left: Logo */}
-        <Link to="/app/feed" className="text-2xl font-bold text-emerald-500 dark:text-emerald-400">
-          BitLog
-        </Link>
+        <motion.div variants={itemVariants}>
+          <Link
+            to="/app/feed"
+            className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight"
+          >
+            BitLog
+          </Link>
+        </motion.div>
 
-        {/* Center: Nav Links (Desktop) */}
-        <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-8  font-semibold text-lg">
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`relative group transition duration-300 ${location.pathname === link.to
-                ? "font-bold text-emerald-700 dark:text-emerald-400"
-                : "text-emerald-600 dark:text-emerald-300"
-                }`}
-            >
-              {link.label}
-              <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-emerald-500 group-hover:w-full transition-all duration-300"></span>
-            </Link>
+        <motion.nav
+          className="hidden md:flex gap-10 font-semibold text-[20px] items-center"
+          variants={navbarVariants}
+        >
+          {navLinks.map((link, index) => (
+            <motion.div key={link.to} variants={itemVariants}>
+              <Link
+                to={link.to}
+                className={`relative group transition-all duration-300 ${location.pathname === link.to
+                  ? "text-emerald-700 dark:text-emerald-300 font-semibold"
+                  : "text-emerald-600 dark:text-emerald-400"
+                  }`}
+              >
+                {link.label}
+                <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-emerald-500 group-hover:w-full transition-all duration-300 rounded-full"></span>
+              </Link>
+            </motion.div>
           ))}
-        </nav>
+        </motion.nav>
 
-        {/* Right: Logout Button (Desktop) */}
-        <div className="hidden md:block">
+        <motion.div className="hidden md:block" variants={itemVariants}>
           <button
             onClick={handleLogout}
-            className="px-4 py-1.5 text-md font-medium rounded-full border border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white transition dark:border-emerald-300 dark:text-emerald-300 dark:hover:bg-emerald-300 dark:hover:text-black"
+            className="px-5 py-2 rounded-full bg-emerald-600 text-white border border-emerald-600 hover:text-white transition hover:scale-105 font-medium"
           >
             Logout
           </button>
-        </div>
+        </motion.div>
 
-        {/* Mobile Menu Icon */}
-        <button
-          className="md:hidden text-emerald-600 dark:text-emerald-300 focus:outline-none"
+        <motion.button
+          className="md:hidden text-emerald-700 dark:text-emerald-300 focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle Menu"
+          variants={itemVariants}
         >
           {menuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
 
-      {/* Mobile Dropdown (animated) */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <motion.nav
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="md:hidden bg-emerald-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow px-6 pt-4 pb-6"
+            className="md:hidden px-6 pb-6 pt-2 bg-emerald-100 dark:bg-gray-900 border-t border-emerald-200 dark:border-gray-700 shadow-md"
           >
-            <nav className="flex flex-col space-y-4 text-emerald-600 dark:text-emerald-300 text-md font-medium">
-              {navLinks.map((link) => (
-                <Link
+            <motion.ul className="flex flex-col space-y-5 text-[17px] font-medium">
+              {navLinks.map((link, i) => (
+                <motion.li
                   key={link.to}
-                  to={link.to}
-                  onClick={() => setMenuOpen(false)}
-                  className={`transition ${location.pathname === link.to
-                    ? "font-semibold text-black dark:text-emerald-400"
-                    : "hover:text-emerald-700 dark:hover:text-emerald-400"
-                    }`}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    to={link.to}
+                    onClick={() => setMenuOpen(false)}
+                    className={`block transition ${location.pathname === link.to
+                      ? "text-emerald-900 dark:text-emerald-300 font-semibold"
+                      : "text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300"
+                      }`}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.li>
               ))}
-              <button
-                onClick={() => {
-                  handleLogout();
-                  setMenuOpen(false);
-                }}
-                className="text-left hover:text-red-600 transition"
+              <motion.li
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.1 }}
               >
-                Logout
-              </button>
-            </nav>
-          </motion.div>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setMenuOpen(false);
+                  }}
+                  className="text-left w-full text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 font-medium transition"
+                >
+                  Logout
+                </button>
+              </motion.li>
+            </motion.ul>
+          </motion.nav>
         )}
       </AnimatePresence>
+      <motion.div
+        style={{
+          scaleX
+        }}
+        className="bg-emerald-500 origin-center w-full h-2"
+      >
+
+      </motion.div>
     </header>
   );
 };

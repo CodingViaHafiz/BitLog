@@ -5,7 +5,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: "0.0.0.0",
+    // host: "0.0.0.0",
     proxy: {
       "/auth": {
         target: "http://localhost:1000",
@@ -14,6 +14,7 @@ export default defineConfig({
     },
     historyApiFallback: true, // add this line
   },
+
   optimizeDeps: {
     include: [
       "tinymce/tinymce",

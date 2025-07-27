@@ -52,12 +52,13 @@ const FeedPage = () => {
       <div className="flex flex-col items-center text-center md:mt-[60px] mb-10">
         <motion.h1
           className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600"
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.2, ease: "easeIn" }}
         >
           Community Feed
         </motion.h1>
+
 
         <motion.p
           className="text-sm font-semibold sm:text-md text-gray-500 mt-5 max-w-xl"
@@ -69,7 +70,6 @@ const FeedPage = () => {
         </motion.p>
       </div>
 
-      {/* SEARCH */}
       <div className="flex justify-center mb-10">
         <input
           type="text"
@@ -80,7 +80,6 @@ const FeedPage = () => {
         />
       </div>
 
-      {/* CATEGORY FILTER */}
       <div className="relative mb-8">
         <hr className="border-t border-gray-300 mb-4" />
         <div className="flex flex-wrap justify-center gap-3">
@@ -101,7 +100,6 @@ const FeedPage = () => {
       </div>
 
 
-      {/* LOADING / ERROR MESSAGES */}
       {loading && (
         // <p className="text-blue-500 animate-pulse text-lg font-medium mb-4 text-center">
         //   Loading posts...
@@ -112,7 +110,6 @@ const FeedPage = () => {
         <p className="text-red-600 text-md font-semibold mb-4 text-center">{error}</p>
       )}
 
-      {/* NO MATCHING POSTS */}
       {!loading && filteredPosts.length === 0 && (
         <motion.p
           className="text-gray-500 italic text-center mt-10"
@@ -123,7 +120,6 @@ const FeedPage = () => {
         </motion.p>
       )}
 
-      {/* POSTS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredPosts.map((post) => {
           const contentPreview =
@@ -143,7 +139,6 @@ const FeedPage = () => {
             >
               <div className="h-full bg-white/70 backdrop-blur-lg border border-gray-200 rounded-2xl shadow hover:shadow-2xl hover:-translate-y-1 transition duration-300 overflow-hidden flex flex-col group">
 
-                {/* Post Image */}
                 {post.image ? (
                   <div className="relative h-60 overflow-hidden">
                     <img
@@ -159,20 +154,19 @@ const FeedPage = () => {
                   </div>
                 )}
 
-                {/* Content */}
                 <div className="flex-grow p-5 flex flex-col">
-                  {/* Title */}
+
                   <h2 className="text-xl font-bold text-emerald-500 group-hover:text-black transition mb-1">
                     {post.title}
                   </h2>
 
-                  {/* Preview */}
+
                   <p
                     className="text-gray-600 text-sm leading-relaxed line-clamp-4 mb-4"
                     dangerouslySetInnerHTML={{ __html: contentPreview }}
                   />
 
-                  {/* Author Info */}
+
                   <div className="flex items-center mt-auto gap-3 pt-4 border-t border-gray-200">
                     <div className="w-10 h-10 bg-emerald-500 text-white rounded-full flex items-center justify-center font-semibold">
                       {post.author?.name?.charAt(0).toUpperCase()}
