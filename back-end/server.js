@@ -1,8 +1,10 @@
 //import dependencies
+// require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const connection = require("./config/db");
 const cookieParser = require("cookie-parser");
-require("dotenv").config();
 const cors = require("cors");
 
 const PORT = process.env.PORT || 1000;

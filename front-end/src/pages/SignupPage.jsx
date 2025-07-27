@@ -24,7 +24,7 @@ const SignupPage = () => {
     dispatch(signupUser(formData)).then((res) => {
       // console.log("Signup response:", res);
       if (res.meta.requestStatus === "fulfilled") {
-        navigate("/app/");
+        navigate("/login");
       }
     });
   };
